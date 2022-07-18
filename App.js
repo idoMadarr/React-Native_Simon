@@ -1,11 +1,14 @@
 import React from 'react';
-import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import AppNavigation from './navigation/AppNavigation';
+import {Provider} from 'react-redux';
+import store from './store/store';
 
 const App = () => {
-  return <AppNavigation />;
+  return (
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
+  );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

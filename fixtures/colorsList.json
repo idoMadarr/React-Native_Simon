@@ -1,0 +1,20 @@
+{
+  "colorsList": [
+    {
+      "color": "red",
+      "activeColor": ""
+    },
+    {
+      "color": "yellow",
+      "activeColor": ""
+    },
+    {
+      "color": "blue",
+      "activeColor": ""
+    },
+    {
+      "color": "green",
+      "activeColor": ""
+    }
+  ]
+}
