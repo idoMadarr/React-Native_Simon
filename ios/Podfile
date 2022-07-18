@@ -4,7 +4,7 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 platform :ios, '11.0'
 install! 'cocoapods', :deterministic_uuids => false
 
-target 'React_Native_Simon_Project' do
+target 'simon_project' do
   config = use_native_modules!
 
   # Flags change depending on the env values.
@@ -19,7 +19,7 @@ target 'React_Native_Simon_Project' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'React_Native_Simon_ProjectTests' do
+  target 'simon_projectTests' do
     inherit! :complete
     # Pods for testing
   end

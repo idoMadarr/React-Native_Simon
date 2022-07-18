@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.react_native_simon_project">
+  package="com.simon_project">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

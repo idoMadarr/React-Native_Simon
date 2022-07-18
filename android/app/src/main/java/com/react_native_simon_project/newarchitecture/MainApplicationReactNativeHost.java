@@ -1,4 +1,4 @@
-package com.react_native_simon_project.newarchitecture;
+package com.simon_project.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.react_native_simon_project.BuildConfig;
-import com.react_native_simon_project.newarchitecture.components.MainComponentsRegistry;
-import com.react_native_simon_project.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.simon_project.BuildConfig;
+import com.simon_project.newarchitecture.components.MainComponentsRegistry;
+import com.simon_project.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

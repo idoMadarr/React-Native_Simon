@@ -1,4 +1,4 @@
-package com.react_native_simon_project;
+package com.simon_project;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "React_Native_Simon_Project";
+    return "simon_project";
   }
 
   /**
