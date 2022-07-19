@@ -4,7 +4,7 @@ import {colors} from '../assets/colors';
 
 const squareSize = Dimensions.get('window').width / 2;
 
-const Square = ({color, createSequence, onSquare, sequenceState}) => {
+const Square = ({color, checkUserColor, sequenceState}) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Square = ({color, createSequence, onSquare, sequenceState}) => {
   return (
     <TouchableOpacity
       key={color}
-      onPress={onSquare}
+      onPress={checkUserColor}
       activeOpacity={0.6}
       style={[styles.squareItem, {backgroundColor: active ? 'white' : color}]}
     />
@@ -29,8 +29,9 @@ const styles = StyleSheet.create({
   squareItem: {
     width: squareSize,
     height: squareSize,
-    borderWidth: 10,
+    borderWidth: 8,
     borderColor: colors.dark,
+    borderRadius: 50,
   },
 });
 

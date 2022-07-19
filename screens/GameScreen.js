@@ -9,7 +9,12 @@ import {
   Dimensions,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
-import {setSequence, clearSequence, setMessage} from '../store/slice';
+import {
+  setSequence,
+  clearSequence,
+  setMessage,
+  setResult,
+} from '../store/slice';
 import Square from '../components/Square';
 import {colors} from '../assets/colors';
 import {colorsList} from '../fixtures/colorsList.json';
@@ -17,25 +22,26 @@ import {colorsList} from '../fixtures/colorsList.json';
 const pressSize = Dimensions.get('window').width / 3;
 
 const GameScreen = ({navigation}) => {
-  const {currentSequence} = useSelector(state => state.mainSlice);
-  const dispatch = useDispatch();
-
+  const currentSequence = useSelector(
+    state => state.mainSlice.currentSequence || [],
+  );
   const [rounds, setRounds] = useState(2);
   const [tester, setTester] = useState(0);
-
   const scaleRef = useRef(new Animated.Value(1)).current;
+  const scoreRef = useRef(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (rounds === tester) return onLastRound();
   }, [tester]);
 
-  const createSequence = () => {
+  const createSequence = sequenceLength => {
     animateButton(1.4, 250);
-    for (let i = 0; i < rounds; i++) {
+    for (let i = 0; i < sequenceLength; i++) {
       setTimeout(() => {
         const random = parseInt(Math.random() * 4);
         dispatch(setSequence(colorsList[random].color));
-      }, 750 * i);
+      }, 850 * i);
     }
   };
 
@@ -43,12 +49,18 @@ const GameScreen = ({navigation}) => {
     const message = {
       header: 'Yay!',
       content: 'You are going to the next level!',
-      onPress: animateButton.bind(this, 1, 250),
+      isSuccess: true,
+      onPress: createSequence.bind(this, rounds + 1),
     };
+    configureNext(message, rounds + 1);
+  };
+
+  const configureNext = (message, rounds) => {
     dispatch(setMessage(message));
-    setRounds(rounds + 1);
+    setRounds(rounds);
     setTester(0);
     dispatch(clearSequence());
+    animateButton(1, 250);
   };
 
   const animateButton = (value, duration) => {
@@ -59,25 +71,33 @@ const GameScreen = ({navigation}) => {
     }).start();
   };
 
-  const onSquare = color => {
-    if (color === currentSequence[tester]) {
-      setTester(tester + 1);
-      return console.log('right');
-    } else {
-      const message = {
-        header: 'Ops!',
-        content: 'It seems like you miss one step ; )',
-        onPress: () => navigation.navigate('dashboard-screen'),
-      };
-      dispatch(setMessage(message));
-      setRounds(2);
-      setTester(0);
-      dispatch(clearSequence());
-      animateButton(1, 250);
-    }
+  const checkUserColor = color => {
+    if (color === currentSequence[tester]) return onSuccess();
+    onFalied();
   };
 
-  console.log(rounds, tester, rounds === tester);
+  const onSuccess = () => {
+    scoreRef.current = scoreRef.current + 1;
+    return setTester(tester + 1);
+  };
+
+  const onFalied = () => {
+    const message = {
+      header: 'Ops!',
+      content: 'It seems like you miss one step ; )',
+      isSuccess: false,
+      onPress: onSave,
+    };
+    animateButton(1, 250);
+    configureNext(message, 2);
+  };
+
+  const onSave = username => {
+    const result = {username, score: scoreRef.current};
+    scoreRef.current = 0;
+    dispatch(setResult(result));
+    navigation.navigate('dashboard-screen');
+  };
 
   return (
     <View style={styles.screen}>
@@ -88,13 +108,14 @@ const GameScreen = ({navigation}) => {
             key={color}
             color={color}
             sequenceState={currentSequence}
-            createSequence={createSequence}
-            onSquare={onSquare.bind(this, color)}
+            checkUserColor={checkUserColor.bind(this, color)}
           />
         ))}
         <Animated.View
           style={[styles.startbutton, {transform: [{scale: scaleRef}]}]}>
-          <Pressable onPress={createSequence} style={styles.pressable}>
+          <Pressable
+            onPress={createSequence.bind(this, 2)}
+            style={styles.pressable}>
             <Text style={styles.startTitle}>Start!</Text>
           </Pressable>
         </Animated.View>
