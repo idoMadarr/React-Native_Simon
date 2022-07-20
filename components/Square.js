@@ -1,22 +1,23 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableOpacity, Dimensions, StyleSheet} from 'react-native';
+import {View, TouchableOpacity, Dimensions, StyleSheet} from 'react-native';
 import {colors} from '../assets/colors';
 
 const squareSize = Dimensions.get('window').width / 2;
 
-const Square = ({color, checkUserColor, sequenceState}) => {
+const Square = ({color, checkUserColor, sequenceState, userMode, initGame}) => {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (sequenceState[sequenceState.length - 1] === color) setActive(true);
+    if (sequenceState[sequenceState.length - 1] === color) {
+      setActive(true);
+      setTimeout(() => setActive(false), 300);
+    }
   }, [sequenceState]);
 
-  useEffect(() => {
-    setTimeout(() => setActive(false), 300);
-  }, [active]);
+  const PadElement = !initGame ? View : userMode ? TouchableOpacity : View;
 
   return (
-    <TouchableOpacity
+    <PadElement
       key={color}
       onPress={checkUserColor}
       activeOpacity={0.6}
@@ -27,6 +28,7 @@ const Square = ({color, checkUserColor, sequenceState}) => {
 
 const styles = StyleSheet.create({
   squareItem: {
+    zIndex: 80,
     width: squareSize,
     height: squareSize,
     borderWidth: 8,

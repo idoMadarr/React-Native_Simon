@@ -6,14 +6,14 @@ import {colors} from '../assets/colors';
 
 const DashboardScreen = () => {
   const results = useSelector(state => state.mainSlice.results);
-  console.log(results);
+
   return (
     <View style={styles.screen}>
-      <View style={styles.header}>
-        <Text>Dashboard Screen</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>The Best Results</Text>
       </View>
       <FlatList
-        data={results}
+        data={results.slice(0, 10)}
         keyExtractor={_itemData => Math.random().toString()}
         renderItem={({item}) => (
           <ScoreItem username={item.username} score={item.score} />
@@ -28,7 +28,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.dark,
   },
-  header: {},
+  titleContainer: {
+    marginHorizontal: 16,
+    padding: 16,
+    borderBottomWidth: 1,
+    borderColor: colors.white,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: colors.white,
+  },
 });
 
 export default DashboardScreen;

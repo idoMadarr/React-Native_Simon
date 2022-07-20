@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TabNavigation from './TabNavigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useSelector, useDispatch} from 'react-redux';
+import AppHeader from '../components/AppHeader';
 import ModalMessage from '../components/ModalMessage';
 import {Modalize} from 'react-native-modalize';
 import {initResult} from '../store/slice';
@@ -30,7 +31,7 @@ const AppNavigation = () => {
 
   return (
     <NavigationContainer>
-      <MainNavigator.Navigator screenOptions={{headerShown: false}}>
+      <MainNavigator.Navigator screenOptions={{header: () => <AppHeader />}}>
         <MainNavigator.Screen name={'menu-bar'} component={TabNavigation} />
       </MainNavigator.Navigator>
       <Modalize

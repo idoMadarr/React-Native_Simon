@@ -16,6 +16,7 @@ import {
   setResult,
 } from '../store/slice';
 import Square from '../components/Square';
+import Overlay from '../components/Overlay';
 import {colors} from '../assets/colors';
 import {colorsList} from '../fixtures/colorsList.json';
 
@@ -27,27 +28,34 @@ const GameScreen = ({navigation}) => {
   );
   const [rounds, setRounds] = useState(2);
   const [tester, setTester] = useState(0);
-  const scaleRef = useRef(new Animated.Value(1)).current;
-  const scoreRef = useRef(0);
+  const [score, setScore] = useState(0);
+  const [initGame, setInitGame] = useState(false);
+  const [userMode, setUserMode] = useState(true);
   const dispatch = useDispatch();
+  const scaleRef = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     if (rounds === tester) return onLastRound();
   }, [tester]);
 
   const createSequence = sequenceLength => {
+    setInitGame(true);
+    setUserMode(false);
     animateButton(1.4, 250);
-    for (let i = 0; i < sequenceLength; i++) {
+    for (let i = 1; i < sequenceLength + 1; i++) {
       setTimeout(() => {
         const random = parseInt(Math.random() * 4);
         dispatch(setSequence(colorsList[random].color));
-      }, 850 * i);
+        if (i === rounds) {
+          setUserMode(true);
+        }
+      }, 1000 * i);
     }
   };
 
   const onLastRound = () => {
     const message = {
-      header: 'Yay!',
+      header: 'Great!',
       content: 'You are going to the next level!',
       isSuccess: true,
       onPress: createSequence.bind(this, rounds + 1),
@@ -77,7 +85,7 @@ const GameScreen = ({navigation}) => {
   };
 
   const onSuccess = () => {
-    scoreRef.current = scoreRef.current + 1;
+    setScore(score + 1);
     return setTester(tester + 1);
   };
 
@@ -93,8 +101,9 @@ const GameScreen = ({navigation}) => {
   };
 
   const onSave = username => {
-    const result = {username, score: scoreRef.current};
-    scoreRef.current = 0;
+    const result = {username, score: score};
+    setScore(0);
+    setInitGame(false);
     dispatch(setResult(result));
     navigation.navigate('dashboard-screen');
   };
@@ -107,19 +116,30 @@ const GameScreen = ({navigation}) => {
           <Square
             key={color}
             color={color}
+            userMode={userMode}
+            initGame={initGame}
             sequenceState={currentSequence}
             checkUserColor={checkUserColor.bind(this, color)}
           />
         ))}
         <Animated.View
-          style={[styles.startbutton, {transform: [{scale: scaleRef}]}]}>
+          style={[
+            styles.startbutton,
+            {
+              transform: [{scale: scaleRef}],
+            },
+          ]}>
           <Pressable
-            onPress={createSequence.bind(this, 2)}
+            onPress={!initGame ? createSequence.bind(this, 2) : null}
             style={styles.pressable}>
             <Text style={styles.startTitle}>Start!</Text>
           </Pressable>
         </Animated.View>
       </View>
+      <View style={styles.scoreContainer}>
+        <Text style={styles.score}>Score: {score}</Text>
+      </View>
+      {!userMode && <Overlay />}
     </View>
   );
 };
@@ -134,6 +154,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 50,
   },
   startbutton: {
     position: 'absolute',
@@ -144,6 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 20,
     borderColor: colors.dark,
+    zIndex: 80,
     justifyContent: 'center',
   },
   pressable: {
@@ -155,6 +177,14 @@ const styles = StyleSheet.create({
   startTitle: {
     fontSize: 22,
     color: 'white',
+  },
+  scoreContainer: {
+    marginVertical: 32,
+  },
+  score: {
+    fontSize: 16,
+    textAlign: 'center',
+    color: colors.white,
   },
 });
 

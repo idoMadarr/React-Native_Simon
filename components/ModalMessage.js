@@ -11,7 +11,7 @@ const ModalMessage = ({message, closeModal}) => {
   const updateState = value => setusername(value);
 
   useEffect(() => {
-    setIsValid(username.length > 1 ? true : false);
+    setIsValid(username.length > 1 || isSuccess ? true : false);
   }, [username]);
 
   const buttonHandler = () => {
@@ -20,7 +20,7 @@ const ModalMessage = ({message, closeModal}) => {
   };
 
   let modalExpand = null;
-  if (!message?.isSuccess) {
+  if (!isSuccess) {
     modalExpand = (
       <TextInput
         value={username}
@@ -39,7 +39,7 @@ const ModalMessage = ({message, closeModal}) => {
       {modalExpand}
       <ButtonElement
         title={isSuccess ? 'Next' : 'Save'}
-        onPress={buttonHandler}
+        onPress={isValid ? buttonHandler : null}
         background={isValid ? colors.dark : colors.placeholder}
         titleColor={isValid ? colors.white : colors.black}
       />

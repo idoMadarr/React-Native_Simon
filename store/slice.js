@@ -21,7 +21,7 @@ export const mainSlice = createSlice({
       state.results = action.payload;
     },
     setResult: (state, action) => {
-      state.results.push(action.payload);
+      state.results.unshift(action.payload);
       AsyncStorage.setItem(`results`, JSON.stringify(state.results));
     },
     setMessage: (state, action) => {
