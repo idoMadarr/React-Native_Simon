@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
+import {tapEffect} from '../utils/sounds';
 import {
   setSequence,
   clearSequence,
@@ -35,6 +36,7 @@ const GameScreen = ({navigation}) => {
   const scaleRef = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
+    tapEffect();
     if (rounds === tester) return onLastRound();
   }, [tester]);
 
@@ -80,6 +82,7 @@ const GameScreen = ({navigation}) => {
   };
 
   const checkUserColor = color => {
+    tapEffect();
     if (color === currentSequence[tester]) return onSuccess();
     onFalied();
   };
