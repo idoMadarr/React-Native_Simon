@@ -19,8 +19,16 @@ const TabNavigation = () => {
         },
         tabBarIndicatorStyle: {position: 'absolute', top: 0},
       }}>
-      <Tab.Screen name={'game-screen'} component={GameScreen} />
-      <Tab.Screen name={'dashboard-screen'} component={DashboardScreen} />
+      <Tab.Screen
+        name={'game-screen'}
+        component={GameScreen}
+        options={{title: 'Game'}}
+      />
+      <Tab.Screen
+        name={'dashboard-screen'}
+        component={DashboardScreen}
+        options={{title: 'Results'}}
+      />
     </Tab.Navigator>
   );
 };

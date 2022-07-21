@@ -7,13 +7,17 @@ import {colors} from '../assets/colors';
 const DashboardScreen = () => {
   const results = useSelector(state => state.mainSlice.results);
 
+  const sortedResults = JSON.parse(JSON.stringify(results)).sort(
+    (a, b) => b.score - a.score,
+  );
+
   return (
     <View style={styles.screen}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>The Best Results</Text>
       </View>
       <FlatList
-        data={results.slice(0, 10)}
+        data={sortedResults.slice(0, 10)}
         keyExtractor={_itemData => Math.random().toString()}
         renderItem={({item}) => (
           <ScoreItem username={item.username} score={item.score} />

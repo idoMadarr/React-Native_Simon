@@ -21,7 +21,7 @@ const AppNavigation = () => {
 
   useEffect(() => {
     const initStorage = async () => {
-      const results = JSON.parse(await AsyncStorage.getItem(`results`));
+      const results = JSON.parse(await AsyncStorage.getItem(`results`)) || [];
       dispatch(initResult(results));
     };
     initStorage();
